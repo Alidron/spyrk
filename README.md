@@ -34,6 +34,9 @@ print spark.captain_hamster.connected
 spark.captain_hamster.digitalwrite('D7', 'HIGH')
 print spark.captain_hamster.analogread('A0')
 # (or any of your own custom function)
+
+# Get variable value
+spark.captain_hamster.myvariable
 ```
 
 ## Currently supporting:
@@ -43,11 +46,11 @@ print spark.captain_hamster.analogread('A0')
 * Automatic discovery of devices.
 * Automatic discovery of functions and variables in a device.
 * Calling a function.
+* Accessing a variable value.
 
 ## Not yet supported:
+* Subscribing and publishing events
 * Any PUT method of the API (like uploading a firmware or application.cpp). That would be cool though.
-* Accessing a variable value.
-* A command line interface (well, an official one is on its way...).
 
 ## Installation
 

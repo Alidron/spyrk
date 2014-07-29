@@ -63,6 +63,10 @@ class SparkCloud(object):
                         _check_error(r)
                         return r.json()['return_value']
                     return fcall
+                elif name in self.variables:
+                    r = self.api(name).GET(params=params)
+                    _check_error(r)
+                    return r.json()['result']
                 else:
                     raise AttributeError()
             Device.__getattr__ = device_getattr
