@@ -5,7 +5,7 @@ Python module for Spark devices.
 Use it as follow:
 
 ```python
-from spark_cloud import SparkCloud
+from Spyrk import SparkCloud
 
 USERNAME = 'he.ho@example.com'
 PASSWORD = 'pasSs'
@@ -51,5 +51,4 @@ print spark.captain_hamster.analogread('A0')
 
 ## Installation
 
-Just clone this git repository and use the file in there.
-Also, you will need [Hammock](https://pypi.python.org/pypi/hammock/0.2.3). Simply do `pip install hammock`.
+`pip install spyrk`.
