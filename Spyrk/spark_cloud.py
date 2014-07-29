@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Spyrk.  If not, see <http://www.gnu.org/licenses/>.
 
+from pprint import pprint
 from collections import namedtuple
 from hammock import Hammock # pip install hammock
 
@@ -52,7 +53,7 @@ class SparkCloud(object):
         
         self.devices = {}
         if json_list:
-            Device = namedtuple('Device', json_list[0].keys() + ['functions', 'variables', 'api'])
+            Device = namedtuple('Device', list(set(json_list[0].keys() + ['requires_deep_update'])) + ['functions', 'variables', 'api'])
             _check_error = self._check_error
             def device_getattr(self, name):
                 if name in self.functions:
