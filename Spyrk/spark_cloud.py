@@ -36,8 +36,8 @@ class SparkCloud(object):
         
     def _login(self, username, password):
         data = {
-            'username':USERNAME,
-            'password':PASSWORD,
+            'username': username,
+            'password': password,
             'grant_type':'password'
         }
         r = self.spark_api.oauth.token.POST(auth=('spark', 'spark'), data=data)
@@ -71,6 +71,8 @@ class SparkCloud(object):
                 d['functions'] = info['functions']
                 d['variables'] = info['variables']
                 d['api'] = self.spark_api(d['id'])
+                d['requires_deep_update'] = d['requires_deep_update'] if d.has_key('requires_deep_update') else False
+
                 self.devices[d['name']] = Device(**d)
             
     def _get_device_info(self, device_id):
