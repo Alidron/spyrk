@@ -13,7 +13,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Spyrk.  If not, see <http://www.gnu.org/licenses/>.
 
-from pprint import pprint
 from collections import namedtuple
 from hammock import Hammock # pip install hammock
 
