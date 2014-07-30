@@ -1,3 +1,3 @@
 __author__ = 'suda'
 
-from spark_cloud import *
+from spark_cloud import SparkCloud

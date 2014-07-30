@@ -14,7 +14,7 @@
 # along with Spyrk.  If not, see <http://www.gnu.org/licenses/>.
 
 from collections import namedtuple
-from hammock import Hammock # pip install hammock
+from hammock import Hammock  # pip install hammock
 
 class SparkCloud(object):
     def __init__(self, username_or_access_token, password=None):
@@ -32,13 +32,16 @@ class SparkCloud(object):
     @staticmethod
     def _check_error(response):
         if (not response.ok) or (response.status_code != 200):
-            raise Exception(response.json()['error'] + ': ' + response.json()['error_description'])
+            raise Exception(
+                response.json()['error'] + ': ' +
+                response.json()['error_description']
+            )
         
     def _login(self, username, password):
         data = {
             'username': username,
             'password': password,
-            'grant_type':'password'
+            'grant_type': 'password'
         }
         r = self.spark_api.oauth.token.POST(auth=('spark', 'spark'), data=data)
         self._check_error(r)
@@ -52,10 +55,16 @@ class SparkCloud(object):
         
         self.devices = {}
         if json_list:
-            Device = namedtuple('Device', list(set(json_list[0].keys() + ['requires_deep_update'])) + ['functions', 'variables', 'api'])
+            Device = namedtuple(
+                'Device',
+                list(set(json_list[0].keys() + ['requires_deep_update'])) +
+                ['functions', 'variables', 'api']
+            )
             _check_error = self._check_error
+            
             def device_getattr(self, name):
                 if name in self.functions:
+                
                     def fcall(*args):
                         data = {'params': ','.join(args)}
                         r = self.api(name).POST(params=params, data=data)
@@ -75,12 +84,12 @@ class SparkCloud(object):
                 d['functions'] = info['functions']
                 d['variables'] = info['variables']
                 d['api'] = self.spark_api(d['id'])
-                d['requires_deep_update'] = d['requires_deep_update'] if d.has_key('requires_deep_update') else False
+                d['requires_deep_update'] = d.get('requires_deep_update', False)
 
                 self.devices[d['name']] = Device(**d)
             
     def _get_device_info(self, device_id):
-        params={'access_token': self.access_token}
+        params = {'access_token': self.access_token}
         r = self.spark_api(device_id).GET(params=params)
         self._check_error(r)
         return r.json()
@@ -90,4 +99,3 @@ class SparkCloud(object):
             return self.devices[name]
         else:
             raise AttributeError()
-
