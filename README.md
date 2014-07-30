@@ -5,7 +5,7 @@ Python module for Spark devices.
 Use it as follow:
 
 ```python
-from spark_cloud import SparkCloud
+from Spyrk import SparkCloud
 
 USERNAME = 'he.ho@example.com'
 PASSWORD = 'pasSs'
@@ -34,6 +34,9 @@ print spark.captain_hamster.connected
 spark.captain_hamster.digitalwrite('D7', 'HIGH')
 print spark.captain_hamster.analogread('A0')
 # (or any of your own custom function)
+
+# Get variable value
+spark.captain_hamster.myvariable
 ```
 
 ## Currently supporting:
@@ -43,13 +46,12 @@ print spark.captain_hamster.analogread('A0')
 * Automatic discovery of devices.
 * Automatic discovery of functions and variables in a device.
 * Calling a function.
+* Accessing a variable value.
 
 ## Not yet supported:
+* Subscribing and publishing events
 * Any PUT method of the API (like uploading a firmware or application.cpp). That would be cool though.
-* Accessing a variable value.
-* A command line interface (well, an official one is on its way...).
 
 ## Installation
 
-Just clone this git repository and use the file in there.
-Also, you will need [Hammock](https://pypi.python.org/pypi/hammock/0.2.3). Simply do `pip install hammock`.
+`pip install spyrk`.

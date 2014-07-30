@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Spyrk.  If not, see <http://www.gnu.org/licenses/>.
 
+from pprint import pprint
 from collections import namedtuple
 from hammock import Hammock # pip install hammock
 
@@ -36,8 +37,8 @@ class SparkCloud(object):
         
     def _login(self, username, password):
         data = {
-            'username':USERNAME,
-            'password':PASSWORD,
+            'username': username,
+            'password': password,
             'grant_type':'password'
         }
         r = self.spark_api.oauth.token.POST(auth=('spark', 'spark'), data=data)
@@ -52,7 +53,7 @@ class SparkCloud(object):
         
         self.devices = {}
         if json_list:
-            Device = namedtuple('Device', json_list[0].keys() + ['functions', 'variables', 'api'])
+            Device = namedtuple('Device', list(set(json_list[0].keys() + ['requires_deep_update'])) + ['functions', 'variables', 'api'])
             _check_error = self._check_error
             def device_getattr(self, name):
                 if name in self.functions:
@@ -62,6 +63,10 @@ class SparkCloud(object):
                         _check_error(r)
                         return r.json()['return_value']
                     return fcall
+                elif name in self.variables:
+                    r = self.api(name).GET(params=params)
+                    _check_error(r)
+                    return r.json()['result']
                 else:
                     raise AttributeError()
             Device.__getattr__ = device_getattr
@@ -71,6 +76,8 @@ class SparkCloud(object):
                 d['functions'] = info['functions']
                 d['variables'] = info['variables']
                 d['api'] = self.spark_api(d['id'])
+                d['requires_deep_update'] = d['requires_deep_update'] if d.has_key('requires_deep_update') else False
+
                 self.devices[d['name']] = Device(**d)
             
     def _get_device_info(self, device_id):
