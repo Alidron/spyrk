@@ -54,4 +54,8 @@ spark.captain_hamster.myvariable
 
 ## Installation
 
-`pip install spyrk`.
+`pip install spyrk`
+
+## Licensing and contributions
+
+Spyrk is licensed under LGPLv3 and welcome contributions following the [C4.1 - Collective Code Construction Contract](http://rfc.zeromq.org/spec:22) process.
