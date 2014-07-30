@@ -5,7 +5,7 @@ from os import path
 here = path.abspath(path.dirname(__file__))
 
 setup(
-    name='Spyrk',
+    name='spyrk',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
@@ -47,10 +47,10 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
+        #'Programming Language :: Python :: 3',
+        #'Programming Language :: Python :: 3.2',
+        #'Programming Language :: Python :: 3.3',
+        #'Programming Language :: Python :: 3.4',
     ],
 
     # What does your project relate to?

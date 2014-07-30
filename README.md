@@ -5,7 +5,7 @@ Python module for Spark devices.
 Use it as follow:
 
 ```python
-from Spyrk import SparkCloud
+from spyrk import SparkCloud
 
 USERNAME = 'he.ho@example.com'
 PASSWORD = 'pasSs'
