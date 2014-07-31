@@ -2,7 +2,11 @@ from setuptools import setup, find_packages  # Always prefer setuptools over dis
 from codecs import open  # To use a consistent encoding
 from os import path
 
-here = path.abspath(path.dirname(__file__))
+# From https://hynek.me/articles/sharing-your-labor-of-love-pypi-quick-and-dirty/
+def read(*paths):
+    """Build a file path from *paths* and return the contents."""
+    with open(path.join(*paths), 'r') as f:
+        return f.read()
 
 setup(
     name='spyrk',
@@ -13,7 +17,9 @@ setup(
     version='0.0.3',
 
     description='Python module for Spark devices',
-    long_description='Module allowing access to Spark Cloud API from Python.',
+    long_description=(read('README.rst') + '\n\n' +
+                      read('AUTHORS.rst') + '\n\n' +
+                      read('CHANGELOG.rst')),
 
     # The project's main homepage.
     url='https://github.com/Alidron/spyrk',
@@ -58,7 +64,8 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
+    # packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
+    py_modules=['spyrk'],
 
     # List run-time dependencies here.  These will be installed by pip when your
     # project is installed. For an analysis of "install_requires" vs pip's
