@@ -17,7 +17,21 @@ Patch Requirements
 
 * A patch should be a minimal and accurate answer to exactly one identified problem.
 * A patch must adhere to a typical code-style enforced with Flake8 for instance. It is tolerated to ignore W293 and E302 rules.
+..  code:: bash
+
+    $ pip install flake8
+    $ flake8 --ignore=W293,E302 spyrk tests
+    
 * A patch must pass the tests on at least principle target platforms.
+..  code:: bash
+    
+    $ pip install pytest
+    $ py.test
+
+    # Using tox to test on various Python versions
+    $ pip install tox
+    $ tox
+    
 * A patch commit message should consist of a single short (less than 50 character) line summarizing the change, optionally followed by a new line and then a more thorough description.
 
 Development process

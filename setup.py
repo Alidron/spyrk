@@ -1,4 +1,6 @@
+import sys
 from setuptools import setup, find_packages  # Always prefer setuptools over distutils
+from setuptools.command.test import test as TestCommand
 from codecs import open  # To use a consistent encoding
 from os import path
 
@@ -7,6 +9,22 @@ def read(*paths):
     """Build a file path from *paths* and return the contents."""
     with open(path.join(*paths), 'r') as f:
         return f.read()
+        
+class PyTest(TestCommand):
+    user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
+    def initialize_options(self):
+        TestCommand.initialize_options(self)
+        self.pytest_args = None
+        
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+        
+    def run(self):
+        import pytest
+        errno = pytest.main(self.pytest_args)
+        sys.exit(errno)
 
 setup(
     name='spyrk',
@@ -72,4 +90,7 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/technical.html#install-requires-vs-requirements-files
     install_requires=['hammock'],
+    
+    tests_require = ['pytest'],
+    cmdclass = { 'test': PyTest },
 )
