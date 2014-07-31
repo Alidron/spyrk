@@ -1,7 +1,7 @@
 Contributions to Spyrk
 ======================
 
-Thank you for wanting to contribute to this project. This is amazing :).
+Thank you for wanting to contribute to this project. You are amazing :).
 
 Spyrk is following the `C4.1 - Collective Code Construction Contract <http://rfc.zeromq.org/spec:22>`_ process. You should read through it, but here are the most important bits for you:
 
