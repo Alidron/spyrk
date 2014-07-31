@@ -57,7 +57,10 @@ class SparkCloud(object):
         if json_list:
             Device = namedtuple(
                 'Device',
-                list(set(json_list[0].keys() + ['requires_deep_update'])) +
+                # Inner list() is for Python 3 dict_keys -> list casting
+                # set() makes this set unique
+                # Outer list() casts unique set into list
+                list(set(list(json_list[0].keys()) + ['requires_deep_update'])) +
                 ['functions', 'variables', 'api']
             )
             _check_error = self._check_error
