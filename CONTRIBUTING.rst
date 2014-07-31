@@ -25,7 +25,7 @@ Development process
 
 * Please, use GitHub issue tracker to log an issue concerning a change or feature request, or propose ideas, suggestions or any solutions to problems.
 * To log an issue, please, describe the problem you face or observe in a documented and provable way. You should then seek concensus on the accuracy and the value of solving the problem.
-* To work on an issue, fork the project repository and then work on your forked repository. On ready, submit your patch through a pull request, where it can be discussed and evaluated. A maintainer of the project can then decide to merge it, ask for improvements or reject it.
+* To work on an issue, fork the project repository and then work on your forked repository. Once ready, submit your patch through a pull request, where it can be discussed and evaluated. A maintainer of the project can then decide to merge it, ask for improvements or reject it.
 * If you have an opposing view on how a patch should be implemented, please, express it via a patch of your own.
 
 Evolution of Public Contracts (APIs)
