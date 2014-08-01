@@ -14,10 +14,53 @@
 # along with Spyrk.  If not, see <http://www.gnu.org/licenses/>.
 
 from collections import namedtuple
+
 from hammock import Hammock  # pip install hammock
 
 class SparkCloud(object):
+
+    """Provides access to the Spark Cloud.
+    
+    >>> spark = SparkCloud(USERNAME, PASSWORD)
+    # Or
+    >>> spark = SparkCloud(ACCESS_TOKEN)
+    
+    # List devices
+    >>> print spark.devices
+
+    # Access device
+    >>> spark.devices['captain_hamster']
+    # Or, shortcut form
+    >>> spark.captain_hamster
+
+    # List functions and variables of a device
+    >>> print spark.captain_hamster.functions
+    >>> print spark.captain_hamster.variables
+
+    # Tell if a device is connected
+    >>> print spark.captain_hamster.connected
+
+    # Call a function
+    >>> spark.captain_hamster.digitalwrite('D7', 'HIGH')
+    >>> print spark.captain_hamster.analogread('A0')
+    # (or any of your own custom function)
+
+    # Get variable value
+    >>> spark.captain_hamster.myvariable
+    """
+    
     def __init__(self, username_or_access_token, password=None):
+        """Initialise the connection to a Spark Cloud.
+        
+        If you give a user name and password an access token will be requested.
+        
+        The list of known devices attached to your account will be requested.
+        
+        If you have several devices and not all of them are connected it will
+        take a long time to create the object. The Spark Cloud will take ~30
+        seconds (per device?) to reply as it waits for an answer from the
+        disconnected devices.
+        """
         self.spark_api = Hammock('https://api.spark.io')
         
         if password is None:
@@ -31,6 +74,7 @@ class SparkCloud(object):
         
     @staticmethod
     def _check_error(response):
+        """Raises an exception if the Spark Cloud returned an error."""
         if (not response.ok) or (response.status_code != 200):
             raise Exception(
                 response.json()['error'] + ': ' +
@@ -38,6 +82,7 @@ class SparkCloud(object):
             )
         
     def _login(self, username, password):
+        """Proceed to login to the Spark Cloud and returns an access token."""
         data = {
             'username': username,
             'password': password,
@@ -48,6 +93,7 @@ class SparkCloud(object):
         return r.json()['access_token']
         
     def _get_devices(self):
+        """Create a dictionary of devices known to the user account."""
         params = {'access_token': self.access_token}
         r = self.spark_api.GET(params=params)
         self._check_error(r)
@@ -67,12 +113,14 @@ class SparkCloud(object):
                 self.devices[d['name']] = Device(**d)
             
     def _get_device_info(self, device_id):
+        """Queries the Spark Cloud for detailed information about a device."""
         params = {'access_token': self.access_token}
         r = self.spark_api(device_id).GET(params=params)
         self._check_error(r)
         return r.json()
             
     def __getattr__(self, name):
+        """Returns a Device object as an attribute of the SparkCloud object."""
         if name in self.devices:
             return self.devices[name]
         else:
@@ -89,7 +137,7 @@ class _BaseDevice(object):
     nametuple.
     
     The namedtuple host all static fields while _BaseDevice host methods
-    extending how the a Device object should behave.
+    extending how a Device object should behave.
     """
 
     @staticmethod
@@ -117,7 +165,7 @@ class _BaseDevice(object):
         )
         
     def __getattr__(self, name):
-        """Return virtual attributes corresponding to function or variable
+        """Returns virtual attributes corresponding to function or variable
         names.
         """
         params = {'access_token': self.spark_cloud.access_token}

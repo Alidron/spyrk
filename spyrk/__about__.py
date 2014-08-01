@@ -13,25 +13,19 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Spyrk.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Spyrk: Python module for Spark devices.
-
-* SparkCloud class provides access to the Spark Cloud.
-  >>> from spyrk import SparkCloud
-
-Spyrk is licensed under LGPLv3.
-
-http://github.com/Alidron/spyrk
-"""
-
-from .spark_cloud import SparkCloud
-from .__about__ import (
-    __title__, __summary__, __uri__, __version__,
-    __author__, __email__, __license__, __copyright__,
-)
-
 __all__ = [
-    'SparkCloud',
-    
     '__title__', '__summary__', '__uri__', '__version__',
     '__author__', '__email__', '__license__', '__copyright__',
 ]
+
+__title__ = 'spyrk'
+__summary__ = 'Python module for Spark devices'
+__uri__ = 'https://github.com/Alidron/spyrk'
+
+__version__ = '0.0.3'
+
+__author__ = 'Axel Voitier'
+__email__ = 'axel.voitier@gmail.com'
+
+__license__ = 'LGPLv3'
+__copyright__ = 'Copyright 2014 Spyrk contributors (see AUTHORS.rst)'
