@@ -25,29 +25,33 @@ class PyTest(TestCommand):
         import pytest
         errno = pytest.main(self.pytest_args)
         sys.exit(errno)
+        
+about = {}
+with open('spyrk/__about__.py') as fp:
+    exec(fp.read(), about)
 
 setup(
-    name='spyrk',
+    name=about['__title__'],
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # http://packaging.python.org/en/latest/tutorial.html#version
-    version='0.0.3',
+    version=about['__version__'],
 
-    description='Python module for Spark devices',
+    description=about['__summary__'],
     long_description=(read('README.rst') + '\n\n' +
                       read('AUTHORS.rst') + '\n\n' +
                       read('CHANGELOG.rst')),
 
     # The project's main homepage.
-    url='https://github.com/Alidron/spyrk',
+    url=about['__uri__'],
 
     # Author details
-    author='Axel Voitier',
-    author_email='axel.voitier@gmail.com',
+    author=about['__author__'],
+    author_email=about['__email__'],
 
     # Choose your license
-    license='LGPLv3',
+    license=about['__license__'],
 
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
@@ -82,8 +86,7 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    # packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
-    py_modules=['spyrk'],
+    packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
 
     # List run-time dependencies here.  These will be installed by pip when your
     # project is installed. For an analysis of "install_requires" vs pip's
