@@ -8,8 +8,10 @@ Spyrk is following the `C4.1 - Collective Code Construction Contract <http://rfc
 Licensing and Ownership
 -----------------------
 
-* Your contribution should use the same license than Spyrk: LGPLv3.
+* Your contribution must use the same license than Spyrk: LGPLv3.
+  * This license was chosen to avoid a forker flies away with the sources and make modifications illegal to back-port in the original project. While allowing integration of Spyrk in applications licensed under any kind of licenses, incl. for commercial purpose, without resorting to double-licensing.
 * All patches are owned by their authors. The copyrights of Spyrk are owned collectively by all its contributors.
+  * This was chosen to clearly ensure contributors that Alidron will NOT fly away with your work by re-licensing it under a different, potentially proprietary license. It will remain free and open-source as it is today, no matter what.
 * Add yourself in the project AUTHORS.rst file.
 
 Patch Requirements
@@ -38,7 +40,7 @@ Development process
 -------------------
 
 * Please, use GitHub issue tracker to log an issue concerning a change or feature request, or propose ideas, suggestions or any solutions to problems.
-* To log an issue, please, describe the problem you face or observe in a documented and provable way. You should then seek concensus on the accuracy and the value of solving the problem.
+* To log an issue, please, describe the problem you face or observe in a documented and provable way. You should then seek consensus on the accuracy and the value of solving the problem.
 * To work on an issue, fork the project repository and then work on your forked repository. Once ready, submit your patch through a pull request, where it can be discussed and evaluated. A maintainer of the project can then decide to merge it, ask for improvements or reject it.
 * If you have an opposing view on how a patch should be implemented, please, express it via a patch of your own.
 
