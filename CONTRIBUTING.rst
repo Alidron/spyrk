@@ -9,9 +9,13 @@ Licensing and Ownership
 -----------------------
 
 * Your contribution must use the same license than Spyrk: LGPLv3.
+
   * This license was chosen to avoid a forker flies away with the sources and make modifications illegal to back-port in the original project. While allowing integration of Spyrk in applications licensed under any kind of licenses, incl. for commercial purpose, without resorting to double-licensing.
+
 * All patches are owned by their authors. The copyrights of Spyrk are owned collectively by all its contributors.
+
   * This was chosen to clearly ensure contributors that Alidron will NOT fly away with your work by re-licensing it under a different, potentially proprietary license. It will remain free and open-source as it is today, no matter what.
+
 * Add yourself in the project AUTHORS.rst file.
 
 Patch Requirements
