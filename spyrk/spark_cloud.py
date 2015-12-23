@@ -102,13 +102,14 @@ class SparkCloud(object):
         self.devices = {}
         if json_list:
             Device = _BaseDevice.make_device_class(self, json_list[0].keys())
-                    
+
             for d in json_list:
                 info = self._get_device_info(d['id'])
-                d['functions'] = info['functions']
-                d['variables'] = info['variables']
+                d['functions'] = info.get('functions')
+                d['variables'] = info.get('variables')
                 d['api'] = self.spark_api(d['id'])
                 d['requires_deep_update'] = d.get('requires_deep_update', False)
+                d['status'] = info.get('status')
 
                 self.devices[d['name']] = Device(**d)
             
@@ -153,7 +154,7 @@ class _BaseDevice(object):
         attrs = list(
             set(
                 list(entries) + [
-                    'requires_deep_update', 'functions', 'variables', 'api'
+                    'requires_deep_update', 'functions', 'variables', 'api', 'status'
                 ]
             )
         )
