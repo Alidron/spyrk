@@ -16,6 +16,7 @@
 from collections import namedtuple
 
 from hammock import Hammock  # pip install hammock
+from cached_property import timed_cached_property # pip install cached-property
 
 class SparkCloud(object):
 
@@ -49,7 +50,7 @@ class SparkCloud(object):
     >>> spark.captain_hamster.myvariable
     """
     
-    def __init__(self, username_or_access_token, password=None):
+    def __init__(self, username_or_access_token, password=None, spark_api = Hammock('https://api.particle.io')):
         """Initialise the connection to a Spark Cloud.
         
         If you give a user name and password an access token will be requested.
@@ -61,7 +62,7 @@ class SparkCloud(object):
         seconds (per device?) to reply as it waits for an answer from the
         disconnected devices.
         """
-        self.spark_api = Hammock('https://api.particle.io')
+        self.spark_api = spark_api
         
         if password is None:
             self.access_token = username_or_access_token
@@ -69,9 +70,7 @@ class SparkCloud(object):
             self.access_token = self._login(username_or_access_token, password)
             
         self.spark_api = self.spark_api.v1.devices
-        
-        self._get_devices()
-        
+
     @staticmethod
     def _check_error(response):
         """Raises an exception if the Spark Cloud returned an error."""
@@ -91,27 +90,39 @@ class SparkCloud(object):
         r = self.spark_api.oauth.token.POST(auth=('spark', 'spark'), data=data)
         self._check_error(r)
         return r.json()['access_token']
-        
-    def _get_devices(self):
+
+    @timed_cached_property(ttl=10) # cache the device for 10 seconds.
+    def devices(self):
         """Create a dictionary of devices known to the user account."""
         params = {'access_token': self.access_token}
         r = self.spark_api.GET(params=params)
         self._check_error(r)
         json_list = r.json()
-        
-        self.devices = {}
+
+        devices_dict = {}
         if json_list:
-            Device = _BaseDevice.make_device_class(self, json_list[0].keys())
+            # it is possible the keys in json responses varies from one device to another: compute the set of all keys
+            allKeys = {'functions', 'variables', 'api', 'requires_deep_update', 'status'} # added by device_info
+            for device_json in json_list:
+                allKeys.update(device_json.keys())
 
+            Device = _BaseDevice.make_device_class(self, allKeys)
+                    
             for d in json_list:
-                info = self._get_device_info(d['id'])
-                d['functions'] = info.get('functions')
-                d['variables'] = info.get('variables')
-                d['api'] = self.spark_api(d['id'])
-                d['requires_deep_update'] = d.get('requires_deep_update', False)
-                d['status'] = info.get('status')
+                if d["connected"]:
+                    info = self._get_device_info(d['id'])
+                    d['functions'] = info.get('functions')
+                    d['variables'] = info.get('variables')
+                    d['api'] = self.spark_api(d['id'])
+                    d['requires_deep_update'] = d.get('requires_deep_update', False)
+                    d['status'] = info.get('status')
+                # ensure the set of all keys is present in the dictionnary (Device constructor requires all keys present)
+                [d.setdefault(key, None) for key in allKeys]
 
-                self.devices[d['name']] = Device(**d)
+                print d
+                devices_dict[d['name']] = Device(**d)
+                
+        return devices_dict
             
     def _get_device_info(self, device_id):
         """Queries the Spark Cloud for detailed information about a device."""
@@ -170,7 +181,9 @@ class _BaseDevice(object):
         names.
         """
         params = {'access_token': self.spark_cloud.access_token}
-        
+        if not self.connected:
+            raise IOError("{}.{} is not available: the spark device is not connected.".format(self.name, name))
+
         if name in self.functions:
         
             def fcall(*args):
