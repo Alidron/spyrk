@@ -61,7 +61,7 @@ class SparkCloud(object):
         seconds (per device?) to reply as it waits for an answer from the
         disconnected devices.
         """
-        self.spark_api = Hammock('https://api.spark.io')
+        self.spark_api = Hammock('https://api.particle.io')
         
         if password is None:
             self.access_token = username_or_access_token
