@@ -87,7 +87,7 @@ class SparkCloud(object):
             'password': password,
             'grant_type': 'password'
         }
-        r = self.spark_api.oauth.token.POST(auth=('spark', 'spark'), data=data)
+        r = self.spark_api.oauth.token.POST(auth=('spark', 'spark'), data=data, timeout=30)
         self._check_error(r)
         return r.json()['access_token']
 
@@ -95,7 +95,7 @@ class SparkCloud(object):
     def devices(self):
         """Create a dictionary of devices known to the user account."""
         params = {'access_token': self.access_token}
-        r = self.spark_api.GET(params=params)
+        r = self.spark_api.GET(params=params, timeout=30)
         self._check_error(r)
         json_list = r.json()
 
@@ -127,7 +127,7 @@ class SparkCloud(object):
     def _get_device_info(self, device_id):
         """Queries the Spark Cloud for detailed information about a device."""
         params = {'access_token': self.access_token}
-        r = self.spark_api(device_id).GET(params=params)
+        r = self.spark_api(device_id).GET(params=params, timeout=30)
         self._check_error(r)
         return r.json()
             
@@ -188,14 +188,14 @@ class _BaseDevice(object):
         
             def fcall(*args):
                 data = {'params': ','.join(args)}
-                r = self.api(name).POST(params=params, data=data)
+                r = self.api(name).POST(params=params, data=data, timeout=30)
                 self.spark_cloud._check_error(r)
                 return r.json()['return_value']
                 
             return fcall
             
         elif name in self.variables:
-            r = self.api(name).GET(params=params)
+            r = self.api(name).GET(params=params, timeout=30)
             self.spark_cloud._check_error(r)
             return r.json()['result']
             
