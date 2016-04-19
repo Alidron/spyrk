@@ -119,7 +119,7 @@ class SparkCloud(object):
                 # ensure the set of all keys is present in the dictionnary (Device constructor requires all keys present)
                 [d.setdefault(key, None) for key in allKeys]
 
-                print d
+                print(d)
                 devices_dict[d['name']] = Device(**d)
                 
         return devices_dict
