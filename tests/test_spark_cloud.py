@@ -138,7 +138,8 @@ def test_login_password(hammock):
     spark = SparkCloud("myLogin", "myPassword", spark_api=hammock)
     hammock.oauth.token.POST.assert_called_once_with(
         auth=('spark', 'spark'),
-        data={"username": "myLogin", "password": "myPassword", "grant_type": "password"}
+        data={"username": "myLogin", "password": "myPassword", "grant_type": "password"},
+        timeout=30
     )
     assert spark.access_token == "254406f79c1999af65a7df4388971354f85cfee9"
 
@@ -152,7 +153,8 @@ def test_target_device_accessed_by_name(hammock):
     spark = SparkCloud("myToken", spark_api=hammock)
     assert spark.T1000.connected == True
     hammock.v1.devices.GET.assert_called_once_with(
-        params={"access_token": "myToken"}
+        params={"access_token": "myToken"},
+        timeout=30
     )
     print(hammock.v1.devices("53ff6e066667574845411267").GET.call_count == 1)
 
@@ -160,7 +162,8 @@ def test_target_device_accessed_by_dictionnary(hammock):
     spark = SparkCloud("myToken", spark_api=hammock)
     assert spark.devices["T1000"].connected == True
     hammock.v1.devices.GET.assert_called_once_with(
-        params={"access_token": "myToken"}
+        params={"access_token": "myToken"},
+        timeout=30
     )
     assert hammock.v1.devices("53ff6e066667574845411267").GET.call_count == 1
 
@@ -192,12 +195,14 @@ def test_function_call(hammock):
     assert 1 == spark.T1000.digitalwrite('D7', 'HIGH')
     hammock.v1.devices("53ff6e066667574845411267")("digitalwrite").POST.assert_called_once_with(
         params={"access_token": "myToken"},
-        data={"params": "D7,HIGH"}
+        data={"params": "D7,HIGH"},
+        timeout=30
     )
 
 def test_variable_fetch(hammock):
     spark = SparkCloud("myToken", spark_api=hammock)
     assert spark.T1000.game_state == "state"
     hammock.v1.devices("53ff6e066667574845411267")("game_state").GET.assert_called_once_with(
-        params={"access_token": "myToken"}
+        params={"access_token": "myToken"},
+        timeout=30
     )
