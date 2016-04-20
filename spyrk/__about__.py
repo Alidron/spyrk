@@ -22,10 +22,10 @@ __title__ = 'spyrk'
 __summary__ = 'Python module for Spark devices'
 __uri__ = 'https://github.com/Alidron/spyrk'
 
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 
 __author__ = 'Axel Voitier'
 __email__ = 'axel.voitier@gmail.com'
 
 __license__ = 'LGPLv3'
-__copyright__ = 'Copyright 2014 Spyrk contributors (see AUTHORS.rst)'
+__copyright__ = 'Copyright 2014-2016 Spyrk contributors (see AUTHORS.rst)'
