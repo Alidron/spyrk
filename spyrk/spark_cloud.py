@@ -50,7 +50,7 @@ class SparkCloud(object):
     >>> spark.captain_hamster.myvariable
     """
     
-    def __init__(self, username_or_access_token, password=None, spark_api = Hammock('https://api.particle.io')):
+    def __init__(self, username_or_access_token, password=None, spark_api = Hammock('https://api.particle.io'), timeout=30):
         """Initialise the connection to a Spark Cloud.
         
         If you give a user name and password an access token will be requested.
@@ -70,6 +70,7 @@ class SparkCloud(object):
             self.access_token = self._login(username_or_access_token, password)
             
         self.spark_api = self.spark_api.v1.devices
+        self.timeout = timeout
 
     @staticmethod
     def _check_error(response):
@@ -87,7 +88,7 @@ class SparkCloud(object):
             'password': password,
             'grant_type': 'password'
         }
-        r = self.spark_api.oauth.token.POST(auth=('spark', 'spark'), data=data, timeout=30)
+        r = self.spark_api.oauth.token.POST(auth=('spark', 'spark'), data=data, timeout=self.timeout)
         self._check_error(r)
         return r.json()['access_token']
 
@@ -95,7 +96,7 @@ class SparkCloud(object):
     def devices(self):
         """Create a dictionary of devices known to the user account."""
         params = {'access_token': self.access_token}
-        r = self.spark_api.GET(params=params, timeout=30)
+        r = self.spark_api.GET(params=params, timeout=self.timeout)
         self._check_error(r)
         json_list = r.json()
 
@@ -106,7 +107,7 @@ class SparkCloud(object):
             for device_json in json_list:
                 allKeys.update(device_json.keys())
 
-            Device = _BaseDevice.make_device_class(self, allKeys)
+            Device = _BaseDevice.make_device_class(self, allKeys, timeout = self.timeout)
                     
             for d in json_list:
                 if d["connected"]:
@@ -152,7 +153,7 @@ class _BaseDevice(object):
     """
 
     @staticmethod
-    def make_device_class(spark_cloud, entries):
+    def make_device_class(spark_cloud, entries, timeout=30):
         """Returns a dynamic Device class based on what a GET device list from
         the Spark Cloud returns.
         
@@ -172,7 +173,7 @@ class _BaseDevice(object):
         return type(
             'Device',
             (_BaseDevice, namedtuple('Device', attrs)),
-            {'__slots__': (), 'spark_cloud': spark_cloud}
+            {'__slots__': (), 'spark_cloud': spark_cloud, 'timeout' : timeout}
         )
         
     def __getattr__(self, name):
@@ -187,7 +188,7 @@ class _BaseDevice(object):
         
             def fcall(*args):
                 data = {'params': ','.join(args)}
-                r = self.api(name).POST(params=params, data=data, timeout=30)
+                r = self.api(name).POST(params=params, data=data, timeout=self.timeout)
                 self.spark_cloud._check_error(r)
                 return r.json()['return_value']
                 
